@@ -1,6 +1,6 @@
 package com.github.tomwadeson.scalafp.datastructures
 
-import com.github.tomwadeson.scalafp.typeclasses.Monoid
+import com.github.tomwadeson.scalafp.typeclasses.{Functor, Monoid}
 
 sealed trait List[+A]
 
@@ -20,6 +20,13 @@ object List {
       case (Nil, y) => y
       case (x, Nil) => x
       case (Cons(h, t), y) => Cons(h, append(t, y))
+    }
+  }
+
+  implicit val FunctorInstance = new Functor[List] {
+    def map[A, B](fa: List[A])(f: (A) => B): List[B] = fa match {
+      case Nil => Nil
+      case Cons(h, t) => Cons(f(h), map(t)(f))
     }
   }
 }

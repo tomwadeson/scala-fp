@@ -15,4 +15,12 @@ class ListSpec extends FlatSpec with Matchers {
     xs |+| Nil should be(xs)
     (Nil: List[Int]) |+| xs should be (xs)
   }
+
+  it should "provide a Functor instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Functor.ops._
+
+    val xs: List[Int] = Cons(1, Cons(2, Cons(3, Nil)))
+    xs.map(_ * 2) should be(Cons(2, Cons(4, Cons(6, Nil))))
+    (Nil: List[Int]).map(_ * 2) should be(Nil)
+  }
 }
