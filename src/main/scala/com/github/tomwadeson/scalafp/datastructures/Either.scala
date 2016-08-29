@@ -1,7 +1,7 @@
 package com.github.tomwadeson.scalafp.datastructures
 
-import Either.{Left, Right}
-import com.github.tomwadeson.scalafp.typeclasses.MonadPlus
+import com.github.tomwadeson.scalafp.datastructures.Either.{Left, Right}
+import com.github.tomwadeson.scalafp.typeclasses.Monad
 
 sealed trait Either[+A, +B] {
   def isLeft: Boolean =
@@ -21,20 +21,14 @@ object Either {
 
   final case class Right[+B](value: B) extends Either[Nothing, B]
 
-  implicit def MonadPlusInstance[L] = new MonadPlus[({type T[a] = Either[L, a]})#T] {
-    def empty[A]: Either[L, A] =
-      ???
-
-    def filter[A](fa: Either[L, A])(p: (A) => Boolean): Either[L, A] =
-      ???
-
+  implicit def MonadInstance[L] = new Monad[({type T[a] = Either[L, a]})#T] {
     def flatMap[A, B](fa: Either[L, A])(f: (A) => Either[L, B]): Either[L, B] =
       ???
 
     def pure[A](a: A): Either[L, A] =
-      ???
+      Right(a)
 
     override def map[A, B](fa: Either[L, A])(f: (A) => B): Either[L, B] =
-      ???
+      fa.fold(Left(_): Either[L, B])(x => Right(f(x)))
   }
 }

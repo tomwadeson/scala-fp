@@ -24,7 +24,9 @@ class EitherSpec extends FlatSpec with Matchers {
   it should "define a Functor instance" in {
     import com.github.tomwadeson.scalafp.typeclasses.Functor.ops._
 
-    x.map(_ + 10) should be(x)
-    y.map(_ + 10) should be(Right(30))
+    val f: Int => Int = (_ + 10)
+
+    x.map(f) should be(x)
+    y.map(f) should be(Right(30))
   }
 }
