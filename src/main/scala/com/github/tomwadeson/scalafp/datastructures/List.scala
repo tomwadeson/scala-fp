@@ -10,6 +10,8 @@ sealed trait List[+A] {
   def reverse: List[A]
 
   def ++[B >: A](other: List[B]): List[B]
+
+  def map[B](f: A => B): List[B]
 }
 
 object List {
@@ -28,6 +30,9 @@ object List {
 
     def ++[B >: A](other: List[B]): List[B] =
       this.foldRight(other)(Cons(_, _))
+
+    def map[B](f: (A) => B): List[B] =
+      Functor[List].map(this)(f)
   }
 
   case object Nil extends List[Nothing] {
@@ -42,6 +47,9 @@ object List {
 
     def ++[B >: Nothing](other: List[B]): List[B] =
       other
+
+    def map[B](f: (Nothing) => B): List[B] =
+      empty[B]
   }
 
   def apply[A](elems: A*): List[A] =
