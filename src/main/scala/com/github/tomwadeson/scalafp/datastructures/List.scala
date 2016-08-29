@@ -1,6 +1,7 @@
 package com.github.tomwadeson.scalafp.datastructures
 
-import com.github.tomwadeson.scalafp.typeclasses.{Functor, Monad, MonadPlus, Monoid}
+import com.github.tomwadeson.scalafp.datastructures.Option.{None, Some}
+import com.github.tomwadeson.scalafp.typeclasses.{MonadPlus, Monoid}
 
 sealed trait List[+A] {
   def foldLeft[B](acc: B)(f: (B, A) => B): B
@@ -10,6 +11,10 @@ sealed trait List[+A] {
   def reverse: List[A]
 
   def ++[B >: A](other: List[B]): List[B]
+
+  def safeHead: Option[A]
+
+  def safeTail: Option[List[A]]
 }
 
 object List {
@@ -28,6 +33,12 @@ object List {
 
     def ++[B >: A](other: List[B]): List[B] =
       this.foldRight(other)(Cons(_, _))
+
+    def safeHead: Option[A] =
+      Some(head)
+
+    def safeTail: Option[List[A]] =
+      Some(tail)
   }
 
   case object Nil extends List[Nothing] {
@@ -42,6 +53,12 @@ object List {
 
     def ++[B >: Nothing](other: List[B]): List[B] =
       other
+
+    def safeHead: Option[Nothing] =
+      None
+
+    def safeTail: Option[List[Nothing]] =
+      None
   }
 
   def apply[A](elems: A*): List[A] =

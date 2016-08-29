@@ -1,6 +1,7 @@
 package com.github.tomwadeson.scalafp.datastructures
 
 import com.github.tomwadeson.scalafp.datastructures.List._
+import com.github.tomwadeson.scalafp.datastructures.Option.{None, Some}
 import org.scalatest.{FlatSpec, Matchers}
 
 class ListSpec extends FlatSpec with Matchers {
@@ -23,6 +24,16 @@ class ListSpec extends FlatSpec with Matchers {
 
   it should "define append" in {
     List(1,2,3) ++ List(4,5,6) should be(List(1,2,3,4,5,6))
+  }
+
+  it should "define safeHead" in {
+    List(1,2).safeHead should be(Some(1))
+    List().safeHead should be(None)
+  }
+
+  it should "define safeTail" in {
+    List(1,2).safeTail should be(Some(List(2)))
+    List().safeTail should be(None)
   }
 
   it should "provide a Monoid instance" in {
