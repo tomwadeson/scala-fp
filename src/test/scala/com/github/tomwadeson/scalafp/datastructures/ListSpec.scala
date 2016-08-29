@@ -61,4 +61,24 @@ class ListSpec extends FlatSpec with Matchers {
     val f: Int => List[Int] = (x => if (x < 3) List(x, x) else List())
     (xs >>= f) should be(List(1, 1, 2, 2))
   }
+
+  it should "provide a MonadPlus instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.MonadPlus.ops._
+    val xs = List(1,2,3,4,5)
+    xs.filter(_ <= 3) should be(List(1,2,3))
+  }
+
+  it should "support for-comprehensions" in {
+    import com.github.tomwadeson.scalafp.typeclasses.MonadPlus.ops._
+    val xs = List(1,2,3,4,5)
+    val ys = List(10, 20, 30, 40, 50)
+
+    val sums = for {
+      x <- xs
+      if (x > 3)
+      y <- ys
+    } yield x + y
+
+    sums should be(List(14, 24, 34, 44, 54, 15, 25, 35, 45, 55))
+  }
 }
