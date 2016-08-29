@@ -43,4 +43,15 @@ class ListSpec extends FlatSpec with Matchers {
     xs.map(_ * 2) should be(List(2,4,6))
     List.empty[Int].map(_ * 2) should be(Nil)
   }
+
+  it should "provide an Applicative instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Applicative.ops._
+    val f1: Int => Int = (_ + 1)
+    val f2: Int => Int = (_ * 2)
+    val fs = List(f1, f2)
+
+    val xs = List(10,20)
+
+    xs <*> fs should be(List(11, 21, 20, 40))
+  }
 }
