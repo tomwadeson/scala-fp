@@ -25,14 +25,6 @@ class ListSpec extends FlatSpec with Matchers {
     List(1,2,3) ++ List(4,5,6) should be(List(1,2,3,4,5,6))
   }
 
-  it should "define map" in {
-    val xs = List(1,2,3)
-    val ys: List[Int] = List()
-
-    xs.map(_ * 10) should be(List(10, 20, 30))
-    ys.map(_ * 10) should be(List.empty[Int])
-  }
-
   it should "provide a Monoid instance" in {
     import com.github.tomwadeson.scalafp.typeclasses.Monoid.ops._
 

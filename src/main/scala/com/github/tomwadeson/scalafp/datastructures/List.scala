@@ -1,6 +1,6 @@
 package com.github.tomwadeson.scalafp.datastructures
 
-import com.github.tomwadeson.scalafp.typeclasses.{Applicative, Functor, Monad, Monoid}
+import com.github.tomwadeson.scalafp.typeclasses.{Functor, Monad, Monoid}
 
 sealed trait List[+A] {
   def foldLeft[B](acc: B)(f: (B, A) => B): B
@@ -10,8 +10,6 @@ sealed trait List[+A] {
   def reverse: List[A]
 
   def ++[B >: A](other: List[B]): List[B]
-
-  def map[B](f: A => B): List[B]
 }
 
 object List {
@@ -30,9 +28,6 @@ object List {
 
     def ++[B >: A](other: List[B]): List[B] =
       this.foldRight(other)(Cons(_, _))
-
-    def map[B](f: (A) => B): List[B] =
-      Functor[List].map(this)(f)
   }
 
   case object Nil extends List[Nothing] {
@@ -47,9 +42,6 @@ object List {
 
     def ++[B >: Nothing](other: List[B]): List[B] =
       other
-
-    def map[B](f: (Nothing) => B): List[B] =
-      empty[B]
   }
 
   def apply[A](elems: A*): List[A] =
@@ -67,31 +59,16 @@ object List {
       x ++ y
   }
 
-  implicit val FunctorInstance = new Functor[List] {
-    def map[A, B](fa: List[A])(f: (A) => B): List[B] =
-      fa.foldRight(empty[B])((x, acc) => Cons(f(x), acc))
-  }
-
-  implicit val ApplicativeInstance = new Applicative[List] {
-    def pure[A](a: A): List[A] =
-      List(a)
-
-    def ap[A, B](fa: List[A])(f: List[(A) => B]): List[B] = {
-      // Annoying that I can't just use `map` here, but there's a cyclic dependency (definition is overridden in `Applicative`)
-      val functor = implicitly[Functor[List]]
-      val nested = functor.map(f)(g => functor.map(fa)(x => g(x)))
-      nested.foldRight(empty[B])(_ ++ _)
-    }
-  }
-
   implicit val MonadInstance = new Monad[List] {
     def flatMap[A, B](fa: List[A])(f: (A) => List[B]): List[B] = {
-      val functor = implicitly[Functor[List]]
-      val nested = functor.map(fa)(f)
+      val nested = map(fa)(f)
       nested.foldRight(empty[B])(_ ++ _)
     }
 
     def pure[A](a: A): List[A] =
       List(a)
+
+    override def map[A, B](fa: List[A])(f: (A) => B): List[B] =
+      fa.foldRight(empty[B])((x, acc) => Cons(f(x), acc))
   }
 }
