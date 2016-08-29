@@ -39,4 +39,32 @@ class OptionSpec extends FlatSpec with Matchers {
     (x >>= f) should be(Some(true))
     (y >>= f) should be(None)
   }
+
+  it should "provide a MonadPlus instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.MonadPlus.ops._
+
+    val p: Int => Boolean = (_ > 0)
+    w.filter(p) should be(None)
+    x.filter(p) should be(x)
+    y.filter(p) should be(None)
+  }
+
+  it should "support for-comprehensions" in {
+    import com.github.tomwadeson.scalafp.typeclasses.MonadPlus.ops._
+
+    val expr1 = for {
+      w <- w
+      if w == -1
+      x <- x
+    } yield x
+
+    expr1 should be(Some(1))
+
+    val expr2 = for {
+      y <- y
+      z <- expr1
+    } yield z
+
+    expr2 should be(None)
+  }
 }
