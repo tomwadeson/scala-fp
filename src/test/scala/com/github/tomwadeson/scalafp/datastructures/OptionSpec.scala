@@ -6,6 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class OptionSpec extends FlatSpec with Matchers {
 
+  val w: Option[Int] = Some(-1)
   val x: Option[Int] = Some(1)
   val y: Option[Int] = None
 
@@ -28,5 +29,14 @@ class OptionSpec extends FlatSpec with Matchers {
 
     x <*> f should be(Some(11))
     y <*> f should be(None)
+  }
+
+  it should "provide a Monad instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Monad.ops._
+
+    val f: Int => Option[Boolean] = (x => if (x > 0) Some(true) else Some(false))
+    (w >>= f) should be(Some(false))
+    (x >>= f) should be(Some(true))
+    (y >>= f) should be(None)
   }
 }
