@@ -20,4 +20,11 @@ class EitherSpec extends FlatSpec with Matchers {
     x.fold(f)(f) should be("10")
     y.fold(f)(f) should be("20")
   }
+
+  it should "define a Functor instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Functor.ops._
+
+    x.map(_ + 10) should be(x)
+    y.map(_ + 10) should be(Right(30))
+  }
 }
