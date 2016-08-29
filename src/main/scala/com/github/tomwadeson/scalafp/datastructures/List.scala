@@ -1,6 +1,6 @@
 package com.github.tomwadeson.scalafp.datastructures
 
-import com.github.tomwadeson.scalafp.typeclasses.{Applicative, Functor, Monoid}
+import com.github.tomwadeson.scalafp.typeclasses.{Applicative, Functor, Monad, Monoid}
 
 sealed trait List[+A] {
   def foldLeft[B](acc: B)(f: (B, A) => B): B
@@ -82,5 +82,16 @@ object List {
       val nested = functor.map(f)(g => functor.map(fa)(x => g(x)))
       nested.foldRight(empty[B])(_ ++ _)
     }
+  }
+
+  implicit val MonadInstance = new Monad[List] {
+    def flatMap[A, B](fa: List[A])(f: (A) => List[B]): List[B] = {
+      val functor = implicitly[Functor[List]]
+      val nested = functor.map(fa)(f)
+      nested.foldRight(empty[B])(_ ++ _)
+    }
+
+    def pure[A](a: A): List[A] =
+      List(a)
   }
 }

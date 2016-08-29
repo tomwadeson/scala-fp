@@ -62,4 +62,11 @@ class ListSpec extends FlatSpec with Matchers {
 
     xs <*> fs should be(List(11, 21, 20, 40))
   }
+
+  it should "provide a Monad instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Monad.ops._
+    val xs = List(1,2,3,4,5)
+    val f: Int => List[Int] = (x => if (x < 3) List(x, x) else List())
+    (xs >>= f) should be(List(1, 1, 2, 2))
+  }
 }
