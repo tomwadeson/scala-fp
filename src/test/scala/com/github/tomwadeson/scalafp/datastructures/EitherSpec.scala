@@ -1,6 +1,7 @@
 package com.github.tomwadeson.scalafp.datastructures
 
 import com.github.tomwadeson.scalafp.datastructures.Either.{Left, Right}
+import com.github.tomwadeson.scalafp.typeclasses.Applicative
 import org.scalatest.{FlatSpec, Matchers}
 
 class EitherSpec extends FlatSpec with Matchers {
@@ -28,5 +29,26 @@ class EitherSpec extends FlatSpec with Matchers {
 
     x.map(f) should be(x)
     y.map(f) should be(Right(30))
+  }
+
+  it should "define an Applicative instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Applicative.ops._
+
+    val x: Either[String, Int] = Right(10)
+    val f: Either[String, Int => Int] = Right(_ * 10)
+
+    x <*> f should be(Right(100))
+  }
+
+  it should "define a Monad instance" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Monad.ops._
+
+    val x: Either[String, Int] = Right(10)
+    val y: Either[String, Int] = Right(0)
+    val f: Int => Either[String, String] =
+      x => if (x > 0) Right("Yes!") else Left("No!")
+
+    (x >>= f) should be(Right("Yes!"))
+    (y >>= f) should be(Left("No!"))
   }
 }

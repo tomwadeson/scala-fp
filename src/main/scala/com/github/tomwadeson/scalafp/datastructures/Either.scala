@@ -23,7 +23,7 @@ object Either {
 
   implicit def MonadInstance[L] = new Monad[({type T[a] = Either[L, a]})#T] {
     def flatMap[A, B](fa: Either[L, A])(f: (A) => Either[L, B]): Either[L, B] =
-      ???
+      fa.fold(Left(_): Either[L, B])(f(_))
 
     def pure[A](a: A): Either[L, A] =
       Right(a)
