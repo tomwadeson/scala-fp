@@ -1,4 +1,4 @@
-package com.github.tomwadeson.scalafp.datastructures
+package com.github.tomwadeson.scalafp.data
 
 import com.github.tomwadeson.scalafp.typeclasses.MonadPlus
 

@@ -1,6 +1,6 @@
-package com.github.tomwadeson.scalafp.datastructures
+package com.github.tomwadeson.scalafp.data
 
-import com.github.tomwadeson.scalafp.datastructures.Option.{None, Some}
+import com.github.tomwadeson.scalafp.data.Option.{None, Some}
 import com.github.tomwadeson.scalafp.typeclasses.Applicative
 import org.scalatest.{FlatSpec, Matchers}
 

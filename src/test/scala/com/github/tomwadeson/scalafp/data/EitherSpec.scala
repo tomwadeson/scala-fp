@@ -1,6 +1,6 @@
-package com.github.tomwadeson.scalafp.datastructures
+package com.github.tomwadeson.scalafp.data
 
-import com.github.tomwadeson.scalafp.datastructures.Either.{Left, Right}
+import com.github.tomwadeson.scalafp.data.Either.{Left, Right}
 import org.scalatest.{FlatSpec, Matchers}
 
 class EitherSpec extends FlatSpec with Matchers {

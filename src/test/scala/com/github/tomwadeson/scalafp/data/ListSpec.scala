@@ -1,7 +1,7 @@
-package com.github.tomwadeson.scalafp.datastructures
+package com.github.tomwadeson.scalafp.data
 
-import com.github.tomwadeson.scalafp.datastructures.List._
-import com.github.tomwadeson.scalafp.datastructures.Option.{None, Some}
+import com.github.tomwadeson.scalafp.data.List._
+import com.github.tomwadeson.scalafp.data.Option.{None, Some}
 import org.scalatest.{FlatSpec, Matchers}
 
 class ListSpec extends FlatSpec with Matchers {
