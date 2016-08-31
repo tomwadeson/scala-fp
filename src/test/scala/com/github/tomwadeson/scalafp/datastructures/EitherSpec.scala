@@ -1,7 +1,6 @@
 package com.github.tomwadeson.scalafp.datastructures
 
 import com.github.tomwadeson.scalafp.datastructures.Either.{Left, Right}
-import com.github.tomwadeson.scalafp.typeclasses.Applicative
 import org.scalatest.{FlatSpec, Matchers}
 
 class EitherSpec extends FlatSpec with Matchers {
@@ -50,5 +49,27 @@ class EitherSpec extends FlatSpec with Matchers {
 
     (x >>= f) should be(Right("Yes!"))
     (y >>= f) should be(Left("No!"))
+  }
+
+  it should "support for-comprehensions (less filtering)" in {
+    import com.github.tomwadeson.scalafp.typeclasses.Monad.ops._
+
+    val x: Either[String, Int] = Right(10)
+    val y: Either[String, Int] = Right(20)
+    val z: Either[String, Int] = Left("Oops, something went wrong!")
+
+    val expr1 = for {
+      x <- x
+      y <- y
+    } yield (x + y)
+
+    expr1 should be(Right(30))
+
+    val expr2 = for {
+      z <- z
+      a <- expr1
+    } yield (z + a)
+
+    expr2 should be(Left("Oops, something went wrong!"))
   }
 }
