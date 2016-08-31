@@ -27,8 +27,5 @@ object Either {
 
     def pure[A](a: A): Either[L, A] =
       Right(a)
-
-    override def map[A, B](fa: Either[L, A])(f: (A) => B): Either[L, B] =
-      fa.fold(Left(_): Either[L, B])(x => Right(f(x)))
   }
 }
